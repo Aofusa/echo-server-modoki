@@ -13,3 +13,10 @@ Run
 -----
 
     $ rebar3 shell
+
+
+Test
+-----
+
+    $ rebar3 eunit
+
