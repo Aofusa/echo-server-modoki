@@ -11,7 +11,13 @@
 
 start(_StartType, _StartArgs) ->
     Dispatch = cowboy_router:compile([
-        { <<"localhost">>, [{<<"/echo">>, echo_handler, []}]}
+        {
+            <<"localhost">>,
+            [
+                {<<"/">>, cowboy_static, {file, <<"../public/static/api.json">>}},
+                {<<"/echo">>, echo_handler, []}
+            ]
+        }
     ]),
     {ok, _} = cowboy:start_clear(
         echo_listener,
