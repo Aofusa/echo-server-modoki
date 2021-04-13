@@ -10,6 +10,18 @@ servers:
     description: Development server
 
 paths:
+  /:
+    get:
+      summary: api list
+      description: show api list
+      responses:
+        '200':
+          description: show api list
+          content:
+            application/json:
+              schema:
+                type: object
+
   /echo:
     post:
       summary: echo message
