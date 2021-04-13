@@ -25,7 +25,8 @@ async fn main() {
         .and(warp::get())
         .map(|| {
             tracing::info!("GET root");
-            "Hello, World at root!"
+            let msg = Message { msg: "Hello, World at root!".to_string() };
+            warp::reply::json(&msg)
         })
         .with(warp::trace::named("root"));
 
