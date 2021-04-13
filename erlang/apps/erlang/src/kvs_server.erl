@@ -2,11 +2,11 @@
 
 -behaviour(gen_server).
 
--export([start/0]).
+-export([start_link/0]).
 -export([set/2, get/1, delete/1]).
 -export([init/1, handle_call/3, handle_cast/2]).
 
-start() ->
+start_link() ->
     gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
 set(Key, Value) ->

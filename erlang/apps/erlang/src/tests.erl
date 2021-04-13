@@ -9,7 +9,7 @@ test() ->
     app_test().
 
 server_test() ->
-    kvs_server:start().
+    kvs_server:start_link().
 
 app_test() ->
     %% create, read and update
