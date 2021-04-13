@@ -27,13 +27,22 @@ rebar3 eunit  # テスト
 rebar3 shell  # 起動
 ```
 
+- rust版の起動
+```sh
+cd rust
+cargo run
+```
+
 - APIの呼び出し
 ```sh
-curl -i  http://localhost:8080
+curl -i http://localhost:8080
 curl -i -d msg=echo http://localhost:8080/echo
-curl -i -H "Content-type: application/json" -d '{"msg":"echo"}' http://localhost:8080/echo
 curl -i -d msg=echo http://localhost:8080/set
 curl -i http://localhost:8080/get
+
+# FIXME: Rust版はこっちじゃないと動かない
+curl -i -H "Content-type: application/json" -d '{"msg":"echo"}' http://localhost:8080/echo
+curl -i -H "Content-type: application/json" -d '{"msg":"echo"}' http://localhost:8080/set
 ```
 
 
