@@ -31,12 +31,13 @@ async fn main() {
         .with(warp::trace::named("root"));
 
     // POST /echo
-    // TODO
     let echo = warp::path("echo")
         .and(warp::post())
-        .map(|| {
+        .and(warp::body::content_length_limit(1024 * 16))
+        .and(warp::body::json())
+        .map(|message: Message| {
             tracing::info!("POST echo");
-            "Hello, World at echo!"
+            warp::reply::json(&message)
         })
         .with(warp::trace::named("echo"));
 
