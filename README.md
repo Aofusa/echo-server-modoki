@@ -31,6 +31,7 @@ rebar3 shell  # 起動
 ```sh
 curl -i  http://localhost:8080
 curl -i -d msg=echo http://localhost:8080/echo
+curl -i -H "Content-type: application/json" -d '{"msg":"echo"}' http://localhost:8080/echo
 curl -i -d msg=echo http://localhost:8080/set
 curl -i http://localhost:8080/get
 ```
