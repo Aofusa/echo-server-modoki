@@ -51,14 +51,9 @@ async fn main() {
     let storage_filter = warp::any().map(move || storage.clone());
 
     // GET /
-    // TODO
     let root = warp::path::end()
         .and(warp::get())
-        .map(|| {
-            tracing::info!("GET root");
-            let msg = Message { msg: "Hello, World at root!".to_string() };
-            warp::reply::json(&msg)
-        })
+        .and(warp::fs::file("../public/static/api.json"))
         .with(warp::trace::named("root"));
 
     // POST /echo
