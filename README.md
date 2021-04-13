@@ -8,12 +8,32 @@ API仕様はdocフォルダ配下に置いてあります
 
 
 ## 基本的なAPI
+- /
+  APIの定義をJSON形式でレスポンス  
 - echo  
   送られたメッセージをそのまま表示します　　
 - set  
   getによって取得できるメッセージを更新します  
 - get
   setによって設定されたメッセージを取得します  
+
+
+### サンプル
+
+- erlang版の起動
+```sh
+cd erlang
+rebar3 eunit  # テスト
+rebar3 shell  # 起動
+```
+
+- APIの呼び出し
+```sh
+curl -i  http://localhost:8080
+curl -i -d msg=echo http://localhost:8080/echo
+curl -i -d msg=echo http://localhost:8080/set
+curl -i http://localhost:8080/get
+```
 
 
 ## 言語ごとのメモ
@@ -26,9 +46,4 @@ API仕様はdocフォルダ配下に置いてあります
   http -> cowboy, jsone
     (cowboyの参考)[https://cpplover.blogspot.com/2020/04/erlang-cowboy-rebar3hello-world-http.html]
   gRPC -> grpc, grpc_client
-
-
-## 今後とか
-OpenAPIを使用してAPIを定義しているけれど
-gRPCで定義し直してみたい
 
