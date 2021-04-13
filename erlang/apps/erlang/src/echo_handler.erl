@@ -7,8 +7,8 @@
 init(Req0, State) ->
     Req = cowboy_req:reply(
         200,
-        #{<<"content-type">> => <<"text/plain">>},
-        <<"hello,world">>,
+        #{<<"content-type">> => <<"application/json">>},
+        jsone:encode(#{<<"message">> => <<"hello,world">>}),
         Req0
     ),
     {ok, Req, State}.

@@ -23,7 +23,7 @@ API仕様はdocフォルダ配下に置いてあります
   gRPC -> tonic, prost, protobuf
 - erlang  
   rebar3
-  http -> cowboy
+  http -> cowboy, jsone
     (cowboyの参考)[https://cpplover.blogspot.com/2020/04/erlang-cowboy-rebar3hello-world-http.html]
   gRPC -> grpc, grpc_client
 
