@@ -1,7 +1,14 @@
 #![deny(warnings)]
 
+use serde_derive::{Deserialize, Serialize};
+
 use tracing_subscriber::fmt::format::FmtSpan;
 use warp::Filter;
+
+#[derive(Deserialize, Serialize)]
+struct Message {
+    msg: String
+}
 
 #[tokio::main]
 async fn main() {
