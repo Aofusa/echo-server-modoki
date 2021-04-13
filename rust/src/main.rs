@@ -1,13 +1,41 @@
 #![deny(warnings)]
 
+mod storage;
+
+use std::collections::HashMap;
+
 use serde_derive::{Deserialize, Serialize};
 
 use tracing_subscriber::fmt::format::FmtSpan;
 use warp::Filter;
 
+use crate::storage::{Storage, Message};
+
 #[derive(Deserialize, Serialize)]
-struct Message {
-    msg: String
+struct Response {
+    code: i32,
+    result: String
+}
+
+async fn set(msg: Message, storage: Storage) -> Result<impl warp::Reply, warp::Rejection> {
+    storage.storage.write().unwrap().insert("msg".to_string(), msg.msg);
+
+    Ok(warp::reply::json(
+        &Response { code: 0, result: "success".to_string() }
+    ))
+}
+
+async fn get(storage: Storage) -> Result<impl warp::Reply, warp::Rejection> {
+    let mut result = HashMap::new();
+    let r = storage.storage.read().unwrap();
+
+    for (key, value) in r.iter() {
+        result.insert(key, value);
+    }
+
+    Ok(warp::reply::json(
+        &result
+    ))
 }
 
 #[tokio::main]
@@ -18,6 +46,9 @@ async fn main() {
         .with_env_filter(filter)
         .with_span_events(FmtSpan::CLOSE)
         .init();
+
+    let storage = Storage::new();
+    let storage_filter = warp::any().map(move || storage.clone());
 
     // GET /
     // TODO
@@ -42,23 +73,19 @@ async fn main() {
         .with(warp::trace::named("echo"));
 
     // POST /set
-    // TODO
     let set = warp::path("set")
         .and(warp::post())
-        .map(|| {
-            tracing::info!("POST set");
-            "Hello, World at set!"
-        })
+        .and(warp::body::content_length_limit(1024 * 16))
+        .and(warp::body::json())
+        .and(storage_filter.clone())
+        .and_then(set)
         .with(warp::trace::named("set"));
 
     // GET /get
-    // TODO
     let get = warp::path("get")
         .and(warp::get())
-        .map(|| {
-            tracing::info!("GET get");
-            "Hello, World at get!"
-        })
+        .and(storage_filter.clone())
+        .and_then(get)
         .with(warp::trace::named("get"));
 
     let routes = root
