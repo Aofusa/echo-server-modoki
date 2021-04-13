@@ -15,10 +15,14 @@ start(_StartType, _StartArgs) ->
             <<"localhost">>,
             [
                 {<<"/">>, cowboy_static, {file, <<"../public/static/api.json">>}},
-                {<<"/echo">>, echo_handler, []}
+                {<<"/echo">>, echo_handler, []},
+                {<<"/set">>, set_handler, []},
+                {<<"/get">>, get_handler, []}
             ]
         }
     ]),
+    kvs_server:start_link(),
+    kvs_server:set(msg, <<"initialize msg">>),
     {ok, _} = cowboy:start_clear(
         echo_listener,
         [{port, 8080}],
