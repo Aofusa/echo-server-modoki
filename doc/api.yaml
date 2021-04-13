@@ -1,0 +1,76 @@
+openapi: 3.0.3
+
+info:
+  title: Echo API
+  description: update message, echo message
+  version: 0.1.0
+
+servers:
+  - url: http://localhost:8080/v1
+    description: Development server
+
+paths:
+  /echo:
+    post:
+      summary: echo message
+      description: echo message
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                msg:
+                  type: string
+      responses:
+        '200':
+          description: echo message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+
+  /set:
+    post:
+      summary: update message
+      description: update echo message
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                msg:
+                  type: string
+      responses:
+        '200':
+          description: success or failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  result:
+                    type: string
+
+  /get:
+    get:
+      summary: get message
+      description: get echo message
+      responses:
+        '200':
+          description: get echo message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
