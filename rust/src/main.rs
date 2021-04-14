@@ -2,43 +2,45 @@
 
 mod storage;
 
-use std::collections::HashMap;
-
 use serde_derive::{Deserialize, Serialize};
 
+use actix::prelude::*;
 use tracing_subscriber::fmt::format::FmtSpan;
 use warp::Filter;
 
-use crate::storage::{Storage, Message};
+use crate::storage::{MsgActor, Msg};
 
 #[derive(Deserialize, Serialize)]
-struct Response {
+struct ResponseSet {
     code: i32,
-    result: String
+    result: String,
 }
 
-async fn set(msg: Message, storage: Storage) -> Result<impl warp::Reply, warp::Rejection> {
-    storage.storage.write().unwrap().insert("msg".to_string(), msg.msg);
+#[derive(Deserialize, Serialize)]
+struct ResponseGet {
+    msg: String,
+}
+
+#[derive(Deserialize, Serialize)]
+struct RequestMsg {
+    msg: String,
+}
+
+async fn set(msg: RequestMsg, storage: Addr<MsgActor>) -> Result<impl warp::Reply, warp::Rejection> {
+    let _ = storage.send(Msg::Set(msg.msg)).await;
 
     Ok(warp::reply::json(
-        &Response { code: 0, result: "success".to_string() }
+        &ResponseSet { code: 0, result: "success".to_string() }
     ))
 }
 
-async fn get(storage: Storage) -> Result<impl warp::Reply, warp::Rejection> {
-    let mut result = HashMap::new();
-    let r = storage.storage.read().unwrap();
-
-    for (key, value) in r.iter() {
-        result.insert(key, value);
-    }
-
+async fn get(storage: Addr<MsgActor>) -> Result<impl warp::Reply, warp::Rejection> {
     Ok(warp::reply::json(
-        &result
+        &ResponseGet { msg: storage.send(Msg::Get).await.unwrap() }
     ))
 }
 
-#[tokio::main]
+#[actix::main]
 async fn main() {
     let filter = std::env::var("RUST_LOG").unwrap_or_else(|_| "tracing=info,warp=debug".to_owned());
 
@@ -47,7 +49,7 @@ async fn main() {
         .with_span_events(FmtSpan::CLOSE)
         .init();
 
-    let storage = Storage::new();
+    let storage = MsgActor { msg: "initialize msg".to_string() }.start();
     let storage_filter = warp::any().map(move || storage.clone());
 
     // GET /
@@ -61,7 +63,7 @@ async fn main() {
         .and(warp::post())
         .and(warp::body::content_length_limit(1024 * 16))
         .and(warp::body::json())
-        .map(|message: Message| {
+        .map(|message: RequestMsg| {
             tracing::info!("POST echo");
             warp::reply::json(&message)
         })
