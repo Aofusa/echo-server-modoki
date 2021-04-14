@@ -55,6 +55,6 @@ curl -i -H "Content-type: application/json" -d '{"msg":"echo"}' http://localhost
 - erlang  
   rebar3  
   http -> cowboy, jsone  
-    (cowboyの参考)[https://cpplover.blogspot.com/2020/04/erlang-cowboy-rebar3hello-world-http.html]  
+    [cowboyの参考](https://cpplover.blogspot.com/2020/04/erlang-cowboy-rebar3hello-world-http.html)  
   gRPC -> grpc, grpc_client  
 
