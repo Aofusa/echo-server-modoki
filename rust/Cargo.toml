@@ -5,6 +5,7 @@ authors = ["Aofusa <5000enPCinAOFUSA@gmail.com>"]
 edition = "2018"
 
 [dependencies]
+actix = "0.11"
 tokio = { version = "1", features = ["full"] }
 warp = "0.3"
 tracing = { version = "0.1", default-features = false, features = ["log", "std"] }
