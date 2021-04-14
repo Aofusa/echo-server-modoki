@@ -1,8 +1,5 @@
 use actix::prelude::*;
 
-use serde_derive::{Deserialize, Serialize};
-
-#[derive(Debug, Deserialize, Serialize, Clone)]
 pub enum Msg {
     Set(String),
     Get,
@@ -12,7 +9,6 @@ impl Message for Msg {
     type Result = String;
 }
 
-#[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct MsgActor {
     pub msg: String,
 }
