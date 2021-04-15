@@ -34,6 +34,13 @@ cargo test  # テスト
 cargo run  # 起動
 ```
 
+- python版の起動
+```sh
+cd python
+pipenv install
+pipenv run python src/server.py
+```
+
 - APIの呼び出し
 ```sh
 curl -i http://localhost:8080
@@ -41,7 +48,7 @@ curl -i -d msg=echo http://localhost:8080/echo
 curl -i -d msg=echo http://localhost:8080/set
 curl -i http://localhost:8080/get
 
-# FIXME: Rust版はこっちじゃないと動かない
+# FIXME: Rust版・Python版はこっちじゃないと動かない
 curl -i -H "Content-type: application/json" -d '{"msg":"echo"}' http://localhost:8080/echo
 curl -i -H "Content-type: application/json" -d '{"msg":"echo"}' http://localhost:8080/set
 ```
@@ -57,4 +64,7 @@ curl -i -H "Content-type: application/json" -d '{"msg":"echo"}' http://localhost
   http -> cowboy, jsone  
     [cowboyの参考](https://cpplover.blogspot.com/2020/04/erlang-cowboy-rebar3hello-world-http.html)  
   gRPC -> grpc, grpc_client  
+- python  
+  pipenv  
+  http -> flack, rxpy  
 
